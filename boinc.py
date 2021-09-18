@@ -1,10 +1,12 @@
 import paramiko
+import os
 import configparser
 import time
 
 # Read config file to get username password and server credentials
 client = []
 server = [0]*2
+ret = 0
 
 config = configparser.ConfigParser()
 config.sections()
@@ -24,7 +26,40 @@ def connect_ssh(server, uname, passw, num):
 #function to read results
 def send_command(num, command):
 	stdin, stdout, stderr = client[num].exec_command(command)
-	print(stdout.read().decode('utf-8'))
+	#print(stdout.read().decode('utf-8'))
+	return  stdout.read().decode('utf-8')
+
+def get_tasks(comp):
+	command = 'boinccmd --get_tasks'
+	if comp == server[0]:
+		print(send_command(0, command))
+	elif comp == server[1]: 
+		print(send_command(1, command))
+	elif comp == 'all':
+		print(send_command(0, command))
+		print(send_command(1, command))
+
+def update_rosetta(comp):
+	command = 'boinccmd --project https://boinc.bakerslab.org/rosetta update'
+	if comp == server[0]:
+		print(send_command(0, command))
+	elif comp == server[1]:
+		print(send_command(1, command))
+	elif comp == 'all':
+		print(send_command(0, command))
+		print(send_command(1, command))
+
+def get_hostname(comp):
+	command = 'hostname'
+	if comp == server[0]:
+		print("Server 0 ", send_command(0, command))
+	elif comp == server[1]:
+		print("Server 1 ", send_command(1, command))
+	elif comp == 'all':
+		print("Server 0 ", send_command(0, command))
+		print("Server 1 ", send_command(1, command))
+
+os.system('clear')
 
 x = 0
 command = 'boinccmd --get_tasks'
@@ -33,25 +68,38 @@ for x in range(2):
 	client.append([])
 	client[x] = paramiko.SSHClient()
 	connect_ssh(server[x], user, pw, x)
-#	send_command(x, command)
 
 count = 0
 
 while 1:
-	#command = 'boinccmd --get_tasks'
-	command = 'ls'
-	send_command(0, command)
-	send_command(1, command)
+	print("list of servers. \n")
+	get_hostname('all')
+	print("List of supported commands: \n u = update server \n g = get task list \n Remember to select one of the servers by entering number.")
 
-	time.sleep(60)
-
-	command = 'ls -l'
-	send_command(0, command)
-	send_command(1, command)
+	val = input("Please enter a command. \n")
 	
-	count = count + 1
-	print('count = ', count)
-	
-	time.sleep(60)
-
-print("Connection Finished")
+	if val.lower() == 'u':
+		val = input("Which server? or type b (back) to return to previous menu. \n")
+		while 1:
+			if val == '0':
+				get_tasks(server[0])
+				break
+			elif val == '1':
+				get_tasks(server[1])
+				break
+			elif val.lower() == 'a' or val.lower() == 'all':
+				get_tasks('all')
+				break
+			elif val.lower() == 'b' or val.lower() == 'back':
+				os.system('clear')
+				break
+			else:
+				print("Invalid server.")
+				get_hostname('all')
+				val = input("Please enter Server or type b or back to go back.\n")
+	elif val.lower() == 'q' or val.lower() == 'exit':
+		print("Connection Finished")
+		quit()
+	else:
+		os.system('clear')
+		print("Command invalid!\n")
