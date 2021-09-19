@@ -6,7 +6,6 @@ import time
 # Read config file to get username password and server credentials
 client = []
 server = [0]*2
-ret = 0
 
 config = configparser.ConfigParser()
 config.sections()
@@ -52,12 +51,12 @@ def update_rosetta(comp):
 def get_hostname(comp):
 	command = 'hostname'
 	if comp == server[0]:
-		print("Server 0 ", send_command(0, command))
+		print("Server 0, Server name %s, IP: %s", (send_command(0, command), server[0]))
 	elif comp == server[1]:
-		print("Server 1 ", send_command(1, command))
+		print("Server 1, Server name %s, IP: %s", (send_command(1, command), server[1]))
 	elif comp == 'all':
-		print("Server 0 ", send_command(0, command))
-		print("Server 1 ", send_command(1, command))
+		print("Server 0, Server name ", send_command(0, command), "IP: ", server[0], " \n")
+		print("Server 1, Server name ", send_command(1, command), "IP: ", server[1], " \n")
 
 os.system('clear')
 
@@ -74,11 +73,11 @@ count = 0
 while 1:
 	print("list of servers. \n")
 	get_hostname('all')
-	print("List of supported commands: \n u = update server \n g = get task list \n Remember to select one of the servers by entering number.")
+	print("List of supported commands: \n u = update server \n g = get task list \n\nRemember to select one of the servers by entering number. \n")
 
 	val = input("Please enter a command. \n")
 	
-	if val.lower() == 'u':
+	if val.lower() == 'g':
 		val = input("Which server? or type b (back) to return to previous menu. \n")
 		while 1:
 			if val == '0':
@@ -92,6 +91,28 @@ while 1:
 				break
 			elif val.lower() == 'b' or val.lower() == 'back':
 				os.system('clear')
+				break
+			else:
+				print("Invalid server.")
+				get_hostname('all')
+				val = input("Please enter Server or type b or back to go back.\n")
+	elif val.lower() == 'u' or val.lower() == 'update':
+		val = input("Which server? or type b (back) to return to previous menu. \n")
+		while 1:
+			if val == '0':
+				upadte_rosetta(server[0])
+				print("Server has been updated.")
+				break
+			elif val == '1':
+				upadte_rosetta(server[1])
+				print("Server has been updated.")
+				break
+			elif val.lower() == 'a' or val.lower() == 'all':
+				upadte_rosetta('all')
+				print("All servers have been updated.")
+				break
+			elif val.lower() == 'b' or val.lower() == 'back':
+				upadte_rosetta('clear')
 				break
 			else:
 				print("Invalid server.")
