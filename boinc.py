@@ -58,7 +58,7 @@ def get_hostname(comp):
 		print("Server 0, Server name ", send_command(0, command), "IP: ", server[0], " \n")
 		print("Server 1, Server name ", send_command(1, command), "IP: ", server[1], " \n")
 
-os.system('clear')
+os.system('clear || cls')
 
 x = 0
 command = 'boinccmd --get_tasks'
@@ -90,7 +90,7 @@ while 1:
 				get_tasks('all')
 				break
 			elif val.lower() == 'b' or val.lower() == 'back':
-				os.system('clear')
+				os.system('clear || cls')
 				break
 			else:
 				print("Invalid server.")
@@ -101,18 +101,18 @@ while 1:
 		while 1:
 			if val == '0':
 				update_rosetta(server[0])
-				print("Server has been updated.")
+				print("Server has been updated.\n")
 				break
 			elif val == '1':
 				update_rosetta(server[1])
-				print("Server has been updated.")
+				print("Server has been updated.\n")
 				break
 			elif val.lower() == 'a' or val.lower() == 'all':
 				update_rosetta('all')
-				print("All servers have been updated.")
+				print("All servers have been updated.\n")
 				break
 			elif val.lower() == 'b' or val.lower() == 'back':
-				update_rosetta('clear')
+				os.system('clear || cls')
 				break
 			else:
 				print("Invalid server.")
@@ -122,5 +122,5 @@ while 1:
 		print("Connection Finished")
 		quit()
 	else:
-		os.system('clear')
+		os.system('clear || cls')
 		print("Command invalid!\n")
