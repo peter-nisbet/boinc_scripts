@@ -39,7 +39,7 @@ def get_tasks(comp):
 		print(send_command(1, command))
 
 def update_rosetta(comp):
-	command = 'boinccmd --project https://boinc.bakerslab.org/rosetta update'
+	command = 'boinccmd --project https://boinc.bakerlab.org/rosetta update'
 	if comp == server[0]:
 		print(send_command(0, command))
 	elif comp == server[1]:
@@ -100,19 +100,19 @@ while 1:
 		val = input("Which server? or type b (back) to return to previous menu. \n")
 		while 1:
 			if val == '0':
-				upadte_rosetta(server[0])
+				update_rosetta(server[0])
 				print("Server has been updated.")
 				break
 			elif val == '1':
-				upadte_rosetta(server[1])
+				update_rosetta(server[1])
 				print("Server has been updated.")
 				break
 			elif val.lower() == 'a' or val.lower() == 'all':
-				upadte_rosetta('all')
+				update_rosetta('all')
 				print("All servers have been updated.")
 				break
 			elif val.lower() == 'b' or val.lower() == 'back':
-				upadte_rosetta('clear')
+				update_rosetta('clear')
 				break
 			else:
 				print("Invalid server.")
